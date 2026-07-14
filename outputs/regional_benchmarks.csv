@@ -1,0 +1,4 @@
+region,total_customers,repeat_customers,retention_rate_pct,total_revenue,avg_order_value,total_orders
+EMEA,99,99,100.0,1043887.02,247.43,4219
+AMER,99,99,100.0,837849.6,228.61,3665
+APJ,99,98,99.0,415464.24,196.9,2110
