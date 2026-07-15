@@ -15,13 +15,13 @@ Built with SQL (SQLite) + Python + Streamlit on the [AWS SaaS Sales dataset](htt
 ### Cohort Retention Heatmap
 ![Cohort Retention](Screenshots/Cohort.png)
 
-### Implied Churn Rate
+### Implied Churn Rate Over Time
 ![Churn Rate](Screenshots/Churn.png)
 
 ### Regional Benchmarking
 ![Regional Benchmarking](Screenshots/Regional.png)
 
-### Revenue Trend
+### Monthly Revenue Trend
 ![Revenue Trend](Screenshots/Revenue.png)
 
 ---
