@@ -10,6 +10,12 @@ Built with SQL (SQLite) + Python + Streamlit on the [AWS SaaS Sales dataset](htt
 
 ---
 
+# Live Demo
+
+**[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://saas-retention-analysis.streamlit.app/)**
+
+---
+
 ## Dashboard
 
 ### Cohort Retention Heatmap
