@@ -8,8 +8,6 @@ An analyst-style dashboard that answers three core retention questions for a B2B
 
 Built with SQL (SQLite) + Python + Streamlit on the [AWS SaaS Sales dataset](https://www.kaggle.com/datasets/nnthanh101/aws-saas-sales).
 
----
-
 ### Live Demo
 
 **[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://saas-retention-analysis.streamlit.app/)**
