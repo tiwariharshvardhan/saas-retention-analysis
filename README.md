@@ -5,6 +5,7 @@ An analyst-style dashboard that answers three core retention questions for a B2B
 1. **Who retained?** — cohort heatmap showing monthly retention at M0–M6
 2. **Who churned?** — implied churn rate trend over time
 3. **Where?** — regional benchmarking by revenue, retention rate, and order value
+4. **Which customers matter most?** — RFM segmentation into Champions, Loyal, At Risk, New, and Lost
 
 Built with SQL (SQLite) + Python + Streamlit on the [AWS SaaS Sales dataset](https://www.kaggle.com/datasets/nnthanh101/aws-saas-sales).
 
@@ -28,6 +29,9 @@ Built with SQL (SQLite) + Python + Streamlit on the [AWS SaaS Sales dataset](htt
 ### Monthly Revenue Trend
 ![Revenue Trend](Screenshots/Revenue.png)
 
+### Customer Segmentation (RFM)
+![RFM Segmentation](Screenshots/RFM.png)
+
 ---
 
 ## Churn Definition
@@ -48,7 +52,8 @@ saas-retention-analysis/
 │   ├── 01_cohort_retention.sql   # monthly cohort × retention % heatmap data
 │   ├── 02_churn_rate.sql         # monthly implied churn rate
 │   ├── 03_regional_benchmarks.sql # revenue + retention by region
-│   └── 04_revenue_trend.sql      # MRR proxy + MoM growth
+│   ├── 04_revenue_trend.sql      # MRR proxy + MoM growth
+│   └── 05_rfm_segmentation.sql   # RFM scores + customer segments
 ├── outputs/                      # generated CSVs (created by pipeline.py)
 ├── pipeline.py                   # raw CSV → SQLite → runs SQL → writes outputs/
 ├── dashboard.py                  # Streamlit app
@@ -102,6 +107,7 @@ Each `.sql` file in `sql/` is a standalone, readable query — no ORM, no abstra
 | `02_churn_rate.sql` | Monthly churn rate (uses `:churn_months` parameter) |
 | `03_regional_benchmarks.sql` | Revenue, repeat customers, retention % by region |
 | `04_revenue_trend.sql` | Monthly revenue + MoM growth % |
+| `05_rfm_segmentation.sql` | Recency, frequency, monetary scores + customer segment |
 
 ---
 
@@ -113,6 +119,7 @@ Each `.sql` file in `sql/` is a standalone, readable query — no ORM, no abstra
 | **Implied Churn Rate** | Monthly churn % trend. Spike = retention event worth investigating. |
 | **Regional Benchmarking** | Revenue rank + retention rank side by side. Divergence = opportunity. |
 | **Revenue Trend** | MRR proxy with MoM growth %. Acceleration or deceleration visible at a glance. |
+| **Customer Segmentation (RFM)** | Customers grouped into Champions, Loyal, At Risk, New, and Lost. |
 
 ---
 

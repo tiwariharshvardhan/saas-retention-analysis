@@ -74,6 +74,7 @@ def main(raw_path: str) -> None:
         ("02_churn_rate.sql",       "churn_rate.csv",       {"churn_months": churn_months}),
         ("03_regional_benchmarks.sql", "regional_benchmarks.csv", None),
         ("04_revenue_trend.sql",    "revenue_trend.csv",    None),
+        ("05_rfm_segmentation.sql", "rfm_segmentation.csv", None),
     ]
 
     for sql_file, out_file, params in jobs:

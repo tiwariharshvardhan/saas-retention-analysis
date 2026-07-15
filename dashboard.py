@@ -33,6 +33,7 @@ def load_outputs() -> dict[str, pd.DataFrame]:
         "churn":    "churn_rate.csv",
         "regional": "regional_benchmarks.csv",
         "revenue":  "revenue_trend.csv",
+        "rfm":      "rfm_segmentation.csv",
         "churn_window": "churn_window.csv",
     }
     return {k: pd.read_csv(os.path.join(OUT_DIR, v)) for k, v in files.items()}
@@ -42,7 +43,8 @@ def check_outputs() -> bool:
     return all(
         os.path.exists(os.path.join(OUT_DIR, f))
         for f in ["cohort_retention.csv", "churn_rate.csv",
-                  "regional_benchmarks.csv", "revenue_trend.csv"]
+                  "regional_benchmarks.csv", "revenue_trend.csv",
+                  "rfm_segmentation.csv"]
     )
 
 
@@ -225,4 +227,71 @@ best_month = rev.loc[rev["revenue"].idxmax()]
 st.info(
     f"**Peak revenue month:** {best_month['month']} "
     f"(${best_month['revenue']:,.0f}, {best_month['active_customers']} active customers)."
+)
+
+# --------------------------------------------------------------------------- #
+# 5. RFM segmentation
+# --------------------------------------------------------------------------- #
+st.subheader("Customer Segmentation (RFM)")
+st.caption(
+    "Every customer scored 1–5 on Recency, Frequency, Monetary, then mapped to "
+    "a segment. Recency is measured from the latest order date in the dataset."
+)
+
+rfm = data["rfm"]
+
+SEGMENT_ORDER = ["Champions", "Loyal", "At Risk", "New", "Lost"]
+summary = (
+    rfm.groupby("segment")
+    .agg(
+        customers=("customer_id", "count"),
+        avg_recency_days=("recency_days", "mean"),
+        avg_frequency=("frequency", "mean"),
+        avg_monetary=("monetary", "mean"),
+        total_revenue=("monetary", "sum"),
+    )
+    .reindex(SEGMENT_ORDER)
+    .dropna(how="all")
+    .reset_index()
+)
+
+col1, col2 = st.columns(2)
+with col1:
+    st.markdown("**Customers per segment**")
+    fig_seg = px.bar(
+        summary, x="segment", y="customers",
+        color="segment",
+        labels={"segment": "Segment", "customers": "Customers"},
+    )
+    fig_seg.update_layout(
+        margin=dict(l=10, r=10, t=30, b=10), height=340, showlegend=False
+    )
+    st.plotly_chart(fig_seg, use_container_width=True)
+
+with col2:
+    st.markdown("**Revenue share per segment**")
+    fig_pie = px.pie(
+        summary, names="segment", values="total_revenue", hole=0.4,
+    )
+    fig_pie.update_layout(margin=dict(l=10, r=10, t=30, b=10), height=340)
+    st.plotly_chart(fig_pie, use_container_width=True)
+
+st.markdown("**Segment profile**")
+seg_disp = summary.copy()
+seg_disp["avg_recency_days"] = seg_disp["avg_recency_days"].map("{:.0f}".format)
+seg_disp["avg_frequency"] = seg_disp["avg_frequency"].map("{:.1f}".format)
+seg_disp["avg_monetary"] = seg_disp["avg_monetary"].map("${:,.0f}".format)
+seg_disp["total_revenue"] = seg_disp["total_revenue"].map("${:,.0f}".format)
+seg_disp.columns = ["Segment", "Customers", "Avg Recency (days)",
+                    "Avg Frequency", "Avg Monetary", "Total Revenue"]
+st.dataframe(seg_disp, hide_index=True, use_container_width=True)
+
+total_rev = rfm["monetary"].sum()
+champ_rev = rfm.loc[rfm["segment"] == "Champions", "monetary"].sum()
+at_risk_rev = rfm.loc[rfm["segment"] == "At Risk", "monetary"].sum()
+champ_pct = (champ_rev / total_rev * 100) if total_rev else 0
+st.info(
+    f"**Champions drive {champ_pct:.1f}% of revenue.**  "
+    f"**At Risk** customers hold **${at_risk_rev:,.0f}** in past revenue — "
+    "the priority group for retention outreach before they slip to Lost."
 )
