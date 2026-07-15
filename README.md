@@ -10,6 +10,22 @@ Built with SQL (SQLite) + Python + Streamlit on the [AWS SaaS Sales dataset](htt
 
 ---
 
+## Dashboard
+
+### Cohort Retention Heatmap
+![Cohort Retention](Screenshots/Cohort.png)
+
+### Implied Churn Rate
+![Churn Rate](Screenshots/Churn.png)
+
+### Regional Benchmarking
+![Regional Benchmarking](Screenshots/Regional.png)
+
+### Revenue Trend
+![Revenue Trend](Screenshots/Revenue.png)
+
+---
+
 ## Churn Definition
 
 > A customer is **inactive / churned** if they place no order within **N months** of their last purchase, where N = `ceil(median repurchase interval × 2)`.
@@ -51,7 +67,10 @@ pip install -r requirements.txt
 
 ### 3. Run the pipeline
 
+The `outputs/` folder already contains committed results (so the deployed dashboard works). Delete them first, then regenerate from your own data:
+
 ```bash
+rm -f outputs/*.csv
 python pipeline.py
 ```
 
